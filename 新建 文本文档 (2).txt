@@ -1,0 +1,255 @@
+//@version=5
+indicator("RSI点阵图—币安所有现货—测试")
+
+A1_1     = input.string(defval =size.huge , title="RSI点位大小", options = [size.huge,size.large,size.normal,size.small,size.tiny])
+hline(70,title="RSI上轨线", color=color.red)
+hline(30,title="RSI下轨线", color=color.red)
+
+//一共355支币种
+t1   ="BINANCE:1INCHUSDT" ,t2   ="BINANCE:AAVEUSDT"    ,t3   ="BINANCE:ACAUSDT"   ,t4   ="BINANCE:ACHUSDT"   ,t5   ="BINANCE:ACMUSDT"    ,t6 ="BINANCE:ZRXUSDT"      ,t7   ="BINANCE:ZILUSDT"    ,t8   ="BINANCE:ADAUSDT"    ,t9   ="BINANCE:ADXUSDT"    ,t10  ="BINANCE:AERGOUSDT",
+t11  ="BINANCE:AGIXUSDT"  ,t12  ="BINANCE:AGLDUSDT"    ,t13  ="BINANCE:AKROUSDT"  ,t14  ="BINANCE:ALCXUSDT"  ,t15  ="BINANCE:ALGOUSDT"   ,t16 ="BINANCE:ALICEUSDT"   ,t17  ="BINANCE:ALPACAUSDT" ,t18  ="BINANCE:ALPHAUSDT"  ,t19  ="BINANCE:ALPINEUSDT" ,t20  ="BINANCE:AMBUSDT"  ,
+t21  ="BINANCE:AMPUSDT"   ,t22  ="BINANCE:ANKRUSDT"    ,t23  ="BINANCE:ANTUSDT"   ,t24  ="BINANCE:APEUSDT"   ,t25  ="BINANCE:API3USDT"   ,t26 ="BINANCE:APTUSDT"     ,t27  ="BINANCE:ARBUSDT"    ,t28  ="BINANCE:ARDRUSDT"   ,t29  ="BINANCE:ARPAUSDT"   ,t30  ="BINANCE:ARUSDT"   ,
+t31  ="BINANCE:ASRUSDT"   ,t32  ="BINANCE:ASTRUSDT"    ,t33  ="BINANCE:ASTUSDT"   ,t34  ="BINANCE:ATAUSDT"   ,t35  ="BINANCE:ATMUSDT"    ,t36 ="BINANCE:ATOMUSDT"    ,t37  ="BINANCE:AUCTIONUSDT",t38  ="BINANCE:AUDIOUSDT"  ,t39  ="BINANCE:AVAUSDT"    ,t40  ="BINANCE:AVAXUSDT" ,
+t41  ="BINANCE:AXSUSDT"   ,t42  ="BINANCE:BADGERUSDT"  ,t43  ="BINANCE:BAKEUSDT"  ,t44  ="BINANCE:BALUSDT"   ,t45  ="BINANCE:BANDUSDT"   ,t46  ="BINANCE:BARUSDT"    ,t47  ="BINANCE:BATUSDT"    ,t48  ="BINANCE:BCHUSDT"    ,t49  ="BINANCE:BELUSDT"    ,t50  ="BINANCE:BETAUSDT" ,
+t51  ="BINANCE:BETHUSDT"  ,t52  ="BINANCE:BICOUSDT"    ,t53  ="BINANCE:BIFIUSDT"  ,t54  ="BINANCE:BLZUSDT"   ,t55  ="BINANCE:BNBDOWNUSDT",t56  ="BINANCE:BNBUPUSDT"  ,t57  ="BINANCE:BNBUSDT"    ,t58  ="BINANCE:BNTUSDT"    ,t59  ="BINANCE:BNXUSDT"    ,t60  ="BINANCE:BONDUSDT" ,
+t61  ="BINANCE:BSWUSDT"   ,t62  ="BINANCE:BTCDOWNUSDT" ,t63  ="BINANCE:BTCUPUSDT" ,t64  ="BINANCE:BTCUSDT"   ,t65  ="BINANCE:BTSUSDT"    ,t66  ="BINANCE:BTTCUSDT"   ,t67  ="BINANCE:BURGERUSDT" ,t68  ="BINANCE:BUSDUSDT"   ,t69  ="BINANCE:C98USDT"    ,t70  ="BINANCE:CAKEUSDT" ,
+t71  ="BINANCE:CELOUSDT"  ,t72  ="BINANCE:CELRUSDT"    ,t73  ="BINANCE:CFXUSDT"   ,t74  ="BINANCE:CHESSUSDT" ,t75  ="BINANCE:CHRUSDT"    ,t76  ="BINANCE:CHZUSDT"    ,t77  ="BINANCE:CITYUSDT"   ,t78  ="BINANCE:CKBUSDT"    ,t79  ="BINANCE:CLVUSDT"    ,t80  ="BINANCE:COMBOUSDT",
+t81  ="BINANCE:COMPUSDT"  ,t82  ="BINANCE:COSUSDT"     ,t83  ="BINANCE:COTIUSDT"  ,t84  ="BINANCE:CRVUSDT"   ,t85  ="BINANCE:CTKUSDT"    ,t86  ="BINANCE:CTSIUSDT"   ,t87  ="BINANCE:CTXCUSDT"   ,t88  ="BINANCE:CVCUSDT"    ,t89  ="BINANCE:CVPUSDT"    ,t90  ="BINANCE:CVXUSDT"  ,
+t91  ="BINANCE:DARUSDT"   ,t92  ="BINANCE:DASHUSDT"    ,t93  ="BINANCE:DATAUSDT"  ,t94  ="BINANCE:DCRUSDT"   ,t95  ="BINANCE:DEGOUSDT"   ,t96  ="BINANCE:DENTUSDT"   ,t97  ="BINANCE:DEXEUSDT"   ,t98  ="BINANCE:DFUSDT"     ,t99  ="BINANCE:DGBUSDT"    ,t100 ="BINANCE:DIAUSDT"  ,
+t101 ="BINANCE:DOCKUSDT"  ,t102 ="BINANCE:DODOUSDT"    ,t103 ="BINANCE:DOGEUSDT"  ,t104 ="BINANCE:DOTUSDT"   ,t105 ="BINANCE:DREPUSDT"   ,t106  ="BINANCE:DUSKUSDT"  ,t107 ="BINANCE:DYDXUSDT"   ,t108 ="BINANCE:EDUUSDT"    ,t109 ="BINANCE:EGLDUSDT"   ,t110 ="BINANCE:ELFUSDT"  ,
+t111 ="BINANCE:ENJUSDT"   ,t112 ="BINANCE:ENSUSDT"     ,t113 ="BINANCE:EOSUSDT"   ,t114 ="BINANCE:EPXUSDT"   ,t115 ="BINANCE:ERNUSDT"    ,t116  ="BINANCE:ETCUSDT"   ,t117 ="BINANCE:ETHDOWNUSDT",t118 ="BINANCE:ETHUPUSDT"  ,t119 ="BINANCE:ETHUSDT"    ,t120 ="BINANCE:EURUSDT"  ,
+t121 ="BINANCE:FARMUSDT"  ,t122 ="BINANCE:FETUSDT"     ,t123 ="BINANCE:FIDAUSDT"  ,t124 ="BINANCE:FILUSDT"   ,t125 ="BINANCE:FIOUSDT"    ,t126  ="BINANCE:FIROUSDT"  ,t127 ="BINANCE:FISUSDT"    ,t128 ="BINANCE:FLMUSDT"    ,t129 ="BINANCE:FLOKIUSDT"  ,t130 ="BINANCE:FLOWUSDT" ,
+t131 ="BINANCE:FLUXUSDT"  ,t132 ="BINANCE:FORTHUSDT"   ,t133 ="BINANCE:FORUSDT"   ,t134 ="BINANCE:FRONTUSDT" ,t135 ="BINANCE:FTMUSDT"    ,t136  ="BINANCE:FUNUSDT"   ,t137 ="BINANCE:FXSUSDT"    ,t138 ="BINANCE:GALAUSDT"   ,t139 ="BINANCE:GALUSDT"    ,t140 ="BINANCE:GASUSDT"  ,
+t141 ="BINANCE:GBPUSDT"   ,t142 ="BINANCE:GHSTUSDT"    ,t143 ="BINANCE:GLMRUSDT"  ,t144 ="BINANCE:GLMUSDT"   ,t145 ="BINANCE:GMTUSDT"    ,t146 ="BINANCE:GMXUSDT"    ,t147 ="BINANCE:GNOUSDT"    ,t148 ="BINANCE:GNSUSDT"    ,t149 ="BINANCE:GRTUSDT"    ,t150 ="BINANCE:GTCUSDT"  ,
+t151 ="BINANCE:HARDUSDT"  ,t152 ="BINANCE:HBARUSDT"    ,t153 ="BINANCE:HFTUSDT"   ,t154 ="BINANCE:HIFIUSDT"  ,t155 ="BINANCE:HIGHUSDT"   ,t156 ="BINANCE:HIVEUSDT"   ,t157 ="BINANCE:HOOKUSDT"   ,t158 ="BINANCE:HOTUSDT"    ,t159 ="BINANCE:ICPUSDT"    ,t160 ="BINANCE:ICXUSDT"  , 
+t161 ="BINANCE:IDEXUSDT"  ,t162 ="BINANCE:IDUSDT"      ,t163 ="BINANCE:ILVUSDT"   ,t164 ="BINANCE:IMXUSDT"   ,t165 ="BINANCE:INJUSDT"    ,t166 ="BINANCE:IOSTUSDT"   ,t167 ="BINANCE:IOTAUSDT"   ,t168 ="BINANCE:IOTXUSDT"   ,t169 ="BINANCE:IRISUSDT"   ,t170 ="BINANCE:JASMYUSDT",
+t171 ="BINANCE:JOEUSDT"   ,t172 ="BINANCE:JSTUSDT"     ,t173 ="BINANCE:JUVUSDT"   ,t174 ="BINANCE:KAVAUSDT"  ,t175 ="BINANCE:KDAUSDT"    ,t176 ="BINANCE:KEYUSDT"    ,t177 ="BINANCE:KLAYUSDT"   ,t178 ="BINANCE:KMDUSDT"    ,t179 ="BINANCE:KNCUSDT"    ,t180 ="BINANCE:KP3RUSDT" ,
+t181 ="BINANCE:KSMUSDT"   ,t182 ="BINANCE:LAZIOUSDT"   ,t183 ="BINANCE:LDOUSDT"   ,t184 ="BINANCE:LEVERUSDT" ,t185 ="BINANCE:LINAUSDT"   ,t186 ="BINANCE:LINKUSDT"   ,t187 ="BINANCE:LITUSDT"    ,t188 ="BINANCE:LOKAUSDT"   ,t189 ="BINANCE:LOOMUSDT"   ,t190 ="BINANCE:LPTUSDT"  ,
+t191 ="BINANCE:LQTYUSDT"  ,t192 ="BINANCE:LRCUSDT"     ,t193 ="BINANCE:LSKUSDT"   ,t194 ="BINANCE:LTCUSDT"   ,t195 ="BINANCE:LTOUSDT"    ,t196 ="BINANCE:LUNAUSDT"   ,t197 ="BINANCE:LUNCUSDT"   ,t198 ="BINANCE:MAGICUSDT"  ,t199 ="BINANCE:MANAUSDT"   ,t200 ="BINANCE:MASKUSDT" ,
+t201 ="BINANCE:MATICUSDT" ,t202 ="BINANCE:MAVUSDT"     ,t203 ="BINANCE:MBLUSDT"   ,t204 ="BINANCE:MBOXUSDT"  ,t205 ="BINANCE:MCUSDT"     ,t206 ="BINANCE:MDTUSDT"    ,t207 ="BINANCE:MDXUSDT"    ,t208 ="BINANCE:MINAUSDT"   ,t209 ="BINANCE:MKRUSDT"    ,t210 ="BINANCE:MLNUSDT"  ,
+t211 ="BINANCE:MOBUSDT"   ,t212 ="BINANCE:MOVRUSDT"    ,t213 ="BINANCE:MTLUSDT"   ,t214 ="BINANCE:MULTIUSDT" ,t215 ="BINANCE:NBTUSDT"    ,t216 ="BINANCE:NEARUSDT"   ,t217 ="BINANCE:NEOUSDT"    ,t218 ="BINANCE:NEXOUSDT"   ,t219 ="BINANCE:NKNUSDT"    ,t220 ="BINANCE:NMRUSDT"  ,
+t221 ="BINANCE:NULSUSDT"  ,t222 ="BINANCE:OAXUSDT"     ,t223 ="BINANCE:OCEANUSDT" ,t224 ="BINANCE:OGNUSDT"   ,t225 ="BINANCE:OGUSDT"     ,t226 ="BINANCE:OMGUSDT"    ,t227 ="BINANCE:OMUSDT"     ,t228 ="BINANCE:ONEUSDT"    ,t229 ="BINANCE:ONGUSDT"    ,t230 ="BINANCE:ONTUSDT"  , 
+t231 ="BINANCE:OOKIUSDT"  ,t232 ="BINANCE:OPUSDT"      ,t233 ="BINANCE:ORNUSDT"   ,t234 ="BINANCE:OSMOUSDT"  ,t235 ="BINANCE:OXTUSDT"    ,t236 ="BINANCE:PAXGUSDT"   ,t237 ="BINANCE:PENDLEUSDT" ,t238 ="BINANCE:PEOPLEUSDT" ,t239 ="BINANCE:PEPEUSDT"   ,t240 ="BINANCE:PERLUSDT" ,
+t241 ="BINANCE:PERPUSDT"  ,t242 ="BINANCE:PHAUSDT"     ,t243 ="BINANCE:PHBUSDT"   ,t244 ="BINANCE:PLAUSDT"   ,t245 ="BINANCE:PNTUSDT"    ,t246 ="BINANCE:POLSUSDT"   ,t247 ="BINANCE:POLYXUSDT"  ,t248 ="BINANCE:PONDUSDT"   ,t249 ="BINANCE:PORTOUSDT"  ,t250 ="BINANCE:POWRUSDT" , 
+t251 ="BINANCE:PROMUSDT"  ,t252 ="BINANCE:PROSUSDT"    ,t253 ="BINANCE:PSGUSDT"   ,t254 ="BINANCE:PUNDIXUSDT",t255 ="BINANCE:PYRUSDT"    ,t256 ="BINANCE:QIUSDT"     ,t257 ="BINANCE:QKCUSDT"    ,t258 ="BINANCE:QNTUSDT"    ,t259 ="BINANCE:QTUMUSDT"   ,t260 ="BINANCE:QUICKUSDT", 
+t261 ="BINANCE:RADUSDT"   ,t262 ="BINANCE:RAREUSDT"    ,t263 ="BINANCE:RAYUSDT"   ,t264 ="BINANCE:RDNTUSDT"  ,t265 ="BINANCE:REEFUSDT"   ,t266 ="BINANCE:REIUSDT"    ,t267 ="BINANCE:RENUSDT"    ,t268 ="BINANCE:REQUSDT"    ,t269 ="BINANCE:RIFUSDT"    ,t270 ="BINANCE:RLCUSDT"  ,
+t271 ="BINANCE:RNDRUSDT"  ,t272 ="BINANCE:ROSEUSDT"    ,t273 ="BINANCE:RPLUSDT"   ,t274 ="BINANCE:RSRUSDT"   ,t275 ="BINANCE:RUNEUSDT"   ,t276 ="BINANCE:RVNUSDT"    ,t277 ="BINANCE:SANDUSDT"   ,t278 ="BINANCE:SANTOSUSDT" ,t279 ="BINANCE:SCRTUSDT"   ,t280 ="BINANCE:SCUSDT"   ,
+t281 ="BINANCE:SFPUSDT"   ,t282 ="BINANCE:SHIBUSDT"    ,t283 ="BINANCE:SKLUSDT"   ,t284 ="BINANCE:SLPUSDT"   ,t285 ="BINANCE:SNTUSDT"    ,t286 ="BINANCE:SNXUSDT"    ,t287 ="BINANCE:SOLUSDT"    ,t288 ="BINANCE:SPELLUSDT"  ,t289 ="BINANCE:SSVUSDT"    ,t290 ="BINANCE:STEEMUSDT",
+t291 ="BINANCE:STGUSDT"   ,t292 ="BINANCE:STMXUSDT"    ,t293 ="BINANCE:STORJUSDT" ,t294 ="BINANCE:STPTUSDT"  ,t295 ="BINANCE:STRAXUSDT"  ,t296 ="BINANCE:STXUSDT"    ,t297 ="BINANCE:SUIUSDT"    ,t298 ="BINANCE:SUNUSDT"    ,t299 ="BINANCE:SUPERUSDT"  ,t300 ="BINANCE:SUSHIUSDT",
+t301 ="BINANCE:SXPUSDT"   ,t302 ="BINANCE:SYNUSDT"     ,t303 ="BINANCE:SYSUSDT"   ,t304 ="BINANCE:TFUELUSDT" ,t305 ="BINANCE:THETAUSDT"  ,t306 ="BINANCE:TKOUSDT"    ,t307 ="BINANCE:TLMUSDT"    ,t308 ="BINANCE:TOMOUSDT"   ,t309 ="BINANCE:TRBUSDT"    ,t310 ="BINANCE:TROYUSDT" ,
+t311 ="BINANCE:TRUUSDT"   ,t312 ="BINANCE:TRXUSDT"     ,t313 ="BINANCE:TUSDT"     ,t314 ="BINANCE:TUSDUSDT"  ,t315 ="BINANCE:TVKUSDT"    ,t316 ="BINANCE:TWTUSDT"    ,t317 ="BINANCE:UFTUSDT"    ,t318 ="BINANCE:UMAUSDT"    ,t319 ="BINANCE:UNFIUSDT"   ,t320 ="BINANCE:UNIUSDT"  , 
+t321 ="BINANCE:USDCUSDT"  ,t322 ="BINANCE:USDPUSDT"    ,t323 ="BINANCE:USTCUSDT"  ,t324 ="BINANCE:UTKUSDT"   ,t325 ="BINANCE:VETUSDT"    ,t326 ="BINANCE:VGXUSDT"    ,t327 ="BINANCE:VIBUSDT"    ,t328 ="BINANCE:VIDTUSDT"   ,t329 ="BINANCE:VITEUSDT"   ,t330 ="BINANCE:VOXELUSDT",
+t331 ="BINANCE:VTHOUSDT"  ,t332 ="BINANCE:WANUSDT"     ,t333 ="BINANCE:WAVESUSDT" ,t334 ="BINANCE:WAXPUSDT"  ,t335 ="BINANCE:WBTCUSDT"   ,t336 ="BINANCE:WINGUSDT"   ,t337 ="BINANCE:WINUSDT"    ,t338 ="BINANCE:WNXMUSDT"   ,t339 ="BINANCE:WOOUSDT"    ,t340 ="BINANCE:WRXUSDT"  , 
+t341 ="BINANCE:WTCUSDT"   ,t342 ="BINANCE:XECUSDT"     ,t343 ="BINANCE:XEMUSDT"   ,t344 ="BINANCE:XLMUSDT"   ,t345 ="BINANCE:XMRUSDT"    ,t346 ="BINANCE:XNOUSDT"    ,t347 ="BINANCE:XRPUSDT"    ,t348 ="BINANCE:XTZUSDT"    ,t349 ="BINANCE:XVGUSDT"    ,t350 ="BINANCE:XVSUSDT"  , 
+t351 ="BINANCE:YFIIUSDT"  ,t352 ="BINANCE:YFIUSDT"     ,t353 ="BINANCE:YGGUSDT"   ,t354 ="BINANCE:ZECUSDT"   ,t355 ="BINANCE:ZENUSDT"   
+
+DiaoYong_RSI(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22,e23,e24,e25,e26,e27,e28,e29,e30,e31,e32,e33,e34,e35,e36,e37,e38,e39,e40) =>                    
+    n1          = request.security(t1 ,timeframe.period,close)       
+    ticker1n    = ta.rsi(n1 ,14)  
+    n2          = request.security(t2 ,timeframe.period,close)       
+    ticker2n    = ta.rsi(n2 ,14)  
+    n3          = request.security(t3 ,timeframe.period,close)       
+    ticker3n    = ta.rsi(n3 ,14)   
+    n4          = request.security(t4 ,timeframe.period,close)       
+    ticker4n    = ta.rsi(n4 ,14)  
+    n5          = request.security(t5 ,timeframe.period,close)       
+    ticker5n    = ta.rsi(n5 ,14)  
+    n6          = request.security(t6 ,timeframe.period,close)       
+    ticker6n    = ta.rsi(n6 ,14) 
+    n7          = request.security(t7 ,timeframe.period,close)       
+    ticker7n    = ta.rsi(n7 ,14)  
+    n8          = request.security(t8 ,timeframe.period,close)       
+    ticker8n    = ta.rsi(n8 ,14)  
+    n9          = request.security(t9 ,timeframe.period,close)       
+    ticker9n    = ta.rsi(n9 ,14) 
+    n10         = request.security(t10,timeframe.period,close)       
+    ticker10n   = ta.rsi(n10,14)   
+    n11         = request.security(t11 ,timeframe.period,close)       
+    ticker11n   = ta.rsi(n11 ,14)  
+    n12         = request.security(t12 ,timeframe.period,close)       
+    ticker12n   = ta.rsi(n12 ,14)  
+    n13         = request.security(t13 ,timeframe.period,close)       
+    ticker13n   = ta.rsi(n13 ,14)   
+    n14         = request.security(t14 ,timeframe.period,close)       
+    ticker14n   = ta.rsi(n14 ,14)  
+    n15         = request.security(t15 ,timeframe.period,close)       
+    ticker15n   = ta.rsi(n15 ,14)  
+    n16         = request.security(t16 ,timeframe.period,close)       
+    ticker16n   = ta.rsi(n16 ,14) 
+    n17         = request.security(t17 ,timeframe.period,close)       
+    ticker17n   = ta.rsi(n17 ,14)  
+    n18         = request.security(t18 ,timeframe.period,close)       
+    ticker18n   = ta.rsi(n18 ,14)  
+    n19         = request.security(t19 ,timeframe.period,close)       
+    ticker19n   = ta.rsi(n19 ,14) 
+    n20         = request.security(t20,timeframe.period,close)       
+    ticker20n   = ta.rsi(n20,14)  
+    n21         = request.security(t21 ,timeframe.period,close)       
+    ticker21n   = ta.rsi(n21 ,14)  
+    n22         = request.security(t22 ,timeframe.period,close)       
+    ticker22n   = ta.rsi(n22 ,14)  
+    n23         = request.security(t23 ,timeframe.period,close)       
+    ticker23n   = ta.rsi(n23 ,14)   
+    n24         = request.security(t24 ,timeframe.period,close)       
+    ticker24n   = ta.rsi(n24 ,14)  
+    n25         = request.security(t25 ,timeframe.period,close)       
+    ticker25n   = ta.rsi(n25 ,14)  
+    n26         = request.security(t26 ,timeframe.period,close)       
+    ticker26n   = ta.rsi(n26 ,14) 
+    n27         = request.security(t27 ,timeframe.period,close)       
+    ticker27n   = ta.rsi(n27 ,14)  
+    n28         = request.security(t28 ,timeframe.period,close)       
+    ticker28n   = ta.rsi(n28 ,14)  
+    n29         = request.security(t29 ,timeframe.period,close)       
+    ticker29n   = ta.rsi(n29 ,14) 
+    n30         = request.security(t30,timeframe.period,close)       
+    ticker30n   = ta.rsi(n30,14)  
+    n31         = request.security(t31 ,timeframe.period,close)       
+    ticker31n   = ta.rsi(n31 ,14)  
+    n32         = request.security(t32 ,timeframe.period,close)       
+    ticker32n   = ta.rsi(n32 ,14)  
+    n33         = request.security(t33 ,timeframe.period,close)       
+    ticker33n   = ta.rsi(n33 ,14)   
+    n34         = request.security(t34 ,timeframe.period,close)       
+    ticker34n   = ta.rsi(n34 ,14)  
+    n35         = request.security(t35 ,timeframe.period,close)       
+    ticker35n   = ta.rsi(n35 ,14)  
+    n36         = request.security(t36 ,timeframe.period,close)       
+    ticker36n   = ta.rsi(n36 ,14) 
+    n37         = request.security(t37 ,timeframe.period,close)       
+    ticker37n   = ta.rsi(n37 ,14)  
+    n38         = request.security(t38 ,timeframe.period,close)       
+    ticker38n   = ta.rsi(n38 ,14)  
+    n39         = request.security(t39 ,timeframe.period,close)       
+    ticker39n   = ta.rsi(n39 ,14) 
+    n40         = request.security(t40,timeframe.period,close)       
+    ticker40n   = ta.rsi(n40,14)          
+    [ticker1n,ticker2n,ticker3n,ticker4n,ticker5n,ticker6n,ticker7n,ticker8n,ticker9n,ticker10n,
+       ticker11n,ticker12n,ticker13n,ticker14n,ticker15n,ticker16n,ticker17n,ticker18n,ticker19n,ticker20n,
+           ticker21n,ticker22n,ticker23n,ticker24n,ticker25n,ticker26n,ticker27n,ticker28n,ticker29n,ticker30n,
+               ticker31n,ticker32n,ticker33n,ticker34n,ticker35n,ticker36n,ticker37n,ticker38n,ticker39n,ticker40n]
+[RSI_1,RSI_2,RSI_3,RSI_4,RSI_5,RSI_6,RSI_7,RSI_8,RSI_9,RSI_10,
+   RSI_11,RSI_12,RSI_13,RSI_14,RSI_15,RSI_16,RSI_17,RSI_18,RSI_19,RSI_20,
+       RSI_21,RSI_22,RSI_23,RSI_24,RSI_25,RSI_26,RSI_27,RSI_28,RSI_29,RSI_30,
+           RSI_31,RSI_32,RSI_33,RSI_34,RSI_35,RSI_36,RSI_37,RSI_38,RSI_39,RSI_40] = DiaoYong_RSI(
+               t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,
+                   t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40) 
+[RSI_41,RSI_42,RSI_43,RSI_44,RSI_45,RSI_46,RSI_47,RSI_48,RSI_49,RSI_50,
+   RSI_51,RSI_52,RSI_53,RSI_54,RSI_55,RSI_56,RSI_57,RSI_58,RSI_59,RSI_60,
+       RSI_61,RSI_62,RSI_63,RSI_64,RSI_65,RSI_66,RSI_67,RSI_68,RSI_69,RSI_70,
+           RSI_71,RSI_72,RSI_73,RSI_74,RSI_75,RSI_76,RSI_77,RSI_78,RSI_79,RSI_80] = DiaoYong_RSI(
+               t41,t42,t43,t44,t45,t46,t47,t48,t49,t50,t51,t52,t53,t54,t55,t56,t57,t58,t59,t60,
+                   t61,t62,t63,t64,t65,t66,t67,t68,t69,t70,t71,t72,t73,t74,t75,t76,t77,t78,t79,t80) 
+[RSI_81,RSI_82,RSI_83,RSI_84,RSI_85,RSI_86,RSI_87,RSI_88,RSI_89,RSI_90,
+   RSI_91,RSI_92,RSI_93,RSI_94,RSI_95,RSI_96,RSI_97,RSI_98,RSI_99,RSI_100,
+       RSI_101,RSI_102,RSI_103,RSI_104,RSI_105,RSI_106,RSI_107,RSI_108,RSI_109,RSI_110,
+           RSI_111,RSI_112,RSI_113,RSI_114,RSI_115,RSI_116,RSI_117,RSI_118,RSI_119,RSI_120] = DiaoYong_RSI(
+               t81,t82,t83,t84,t85,t86,t87,t88,t89,t90,t91,t92,t93,t94,t95,t96,t97,t98,t99,t100,
+                   t101,t102,t103,t104,t105,t106,t107,t108,t109,t110,t111,t112,t113,t114,t115,t116,t117,t118,t119,t120) 
+[RSI_121,RSI_122,RSI_123,RSI_124,RSI_125,RSI_126,RSI_127,RSI_128,RSI_129,RSI_130,
+   RSI_131,RSI_132,RSI_133,RSI_134,RSI_135,RSI_136,RSI_137,RSI_138,RSI_139,RSI_140,
+       RSI_141,RSI_142,RSI_143,RSI_144,RSI_145,RSI_146,RSI_147,RSI_148,RSI_149,RSI_150,
+           RSI_151,RSI_152,RSI_153,RSI_154,RSI_155,RSI_156,RSI_157,RSI_158,RSI_159,RSI_160] = DiaoYong_RSI(
+               t121,t122,t123,t124,t125,t126,t127,t128,t129,t130,t131,t132,t133,t134,t135,t136,t137,t138,t139,t140,
+                   t141,t142,t143,t144,t145,t146,t147,t148,t149,t150,t151,t152,t153,t154,t155,t156,t157,t158,t159,t160) 
+[RSI_161,RSI_162,RSI_163,RSI_164,RSI_165,RSI_166,RSI_167,RSI_168,RSI_169,RSI_170,
+   RSI_171,RSI_172,RSI_173,RSI_174,RSI_175,RSI_176,RSI_177,RSI_178,RSI_179,RSI_180,
+       RSI_181,RSI_182,RSI_183,RSI_184,RSI_185,RSI_186,RSI_187,RSI_188,RSI_189,RSI_190,
+           RSI_191,RSI_192,RSI_193,RSI_194,RSI_195,RSI_196,RSI_197,RSI_198,RSI_199,RSI_200] = DiaoYong_RSI(
+               t161,t162,t163,t164,t165,t166,t167,t168,t169,t170,t171,t172,t173,t174,t175,t176,t177,t178,t179,t180,
+                   t191,t192,t193,t194,t195,t196,t197,t198,t199,t190,t191,t192,t193,t194,t195,t196,t197,t198,t199,t200) 
+[RSI_201,RSI_202,RSI_203,RSI_204,RSI_205,RSI_206,RSI_207,RSI_208,RSI_209,RSI_210,
+   RSI_211,RSI_212,RSI_213,RSI_214,RSI_215,RSI_216,RSI_217,RSI_218,RSI_219,RSI_220,
+       RSI_221,RSI_222,RSI_223,RSI_224,RSI_225,RSI_226,RSI_227,RSI_228,RSI_229,RSI_230,
+           RSI_231,RSI_232,RSI_233,RSI_234,RSI_235,RSI_236,RSI_237,RSI_238,RSI_239,RSI_240] = DiaoYong_RSI(
+               t201,t202,t203,t204,t205,t206,t207,t208,t209,t210,t211,t212,t213,t214,t215,t216,t217,t218,t219,t220,
+                   t221,t222,t223,t224,t225,t226,t227,t228,t229,t230,t231,t232,t233,t234,t235,t236,t237,t238,t239,t240) 
+[RSI_241,RSI_242,RSI_243,RSI_244,RSI_245,RSI_246,RSI_247,RSI_248,RSI_249,RSI_250,
+   RSI_251,RSI_252,RSI_253,RSI_254,RSI_255,RSI_256,RSI_257,RSI_258,RSI_259,RSI_260,
+       RSI_261,RSI_262,RSI_263,RSI_264,RSI_265,RSI_266,RSI_267,RSI_268,RSI_269,RSI_270,
+           RSI_271,RSI_272,RSI_273,RSI_274,RSI_275,RSI_276,RSI_277,RSI_278,RSI_279,RSI_280] = DiaoYong_RSI(
+               t241,t242,t243,t244,t245,t246,t247,t248,t249,t250,t251,t252,t253,t254,t255,t256,t257,t258,t259,t260,
+                   t261,t262,t263,t264,t265,t266,t267,t268,t269,t270,t271,t272,t273,t274,t275,t276,t277,t278,t279,t280) 
+[RSI_281,RSI_282,RSI_283,RSI_284,RSI_285,RSI_286,RSI_287,RSI_288,RSI_289,RSI_290,
+   RSI_291,RSI_292,RSI_293,RSI_294,RSI_295,RSI_296,RSI_297,RSI_298,RSI_299,RSI_300,
+       RSI_301,RSI_302,RSI_303,RSI_304,RSI_305,RSI_306,RSI_307,RSI_308,RSI_309,RSI_310,
+           RSI_311,RSI_312,RSI_313,RSI_314,RSI_315,RSI_316,RSI_317,RSI_318,RSI_319,RSI_320] = DiaoYong_RSI(
+               t281,t282,t283,t284,t285,t286,t287,t288,t289,t290,t291,t292,t293,t294,t295,t296,t297,t298,t299,t300,
+                   t301,t302,t303,t304,t305,t306,t307,t308,t309,t310,t311,t312,t313,t314,t315,t316,t317,t318,t319,t320) 
+[RSI_321,RSI_322,RSI_323,RSI_324,RSI_325,RSI_326,RSI_327,RSI_328,RSI_329,RSI_330,
+   RSI_331,RSI_332,RSI_333,RSI_334,RSI_335,RSI_336,RSI_337,RSI_338,RSI_339,RSI_340,
+       RSI_341,RSI_342,RSI_343,RSI_344,RSI_345,RSI_346,RSI_347,RSI_348,RSI_349,RSI_350,
+           RSI_351,RSI_352,RSI_353,RSI_354,RSI_355,RSI_356,RSI_357,RSI_358,RSI_359,RSI_360] = DiaoYong_RSI(
+               t321,t322,t323,t324,t325,t326,t327,t328,t329,t330,t331,t332,t333,t334,t335,t336,t337,t338,t339,t340,
+                   t341,t342,t343,t344,t345,t346,t347,t348,t349,t350,t351,t352,t353,t354,t355,t355,t355,t355,t355,t355) 
+
+HanShu_plot(
+   p1 ,B1 ,time1
+  ,p2 ,B2 ,time2
+  ,p3 ,B3 ,time3
+  ,p4 ,B4 ,time4
+  ,p5 ,B5 ,time5
+  ,p6 ,B6 ,time6
+  ,p7 ,B7 ,time7
+  ,p8 ,B8 ,time8
+  ,p9 ,B9 ,time9
+  ,p10,B10,time10) =>
+    plot1n  =  label.new(x=bar_index+time1, y=p1, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B1), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot1n[1])
+    plot2n  =  label.new(x=bar_index+time2, y=p2, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B2), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot2n[1])
+    plot3n  =  label.new(x=bar_index+time3, y=p3, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B3), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot3n[1])
+    plot4n  =  label.new(x=bar_index+time4, y=p4, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B4), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot4n[1])
+    plot5n  =  label.new(x=bar_index+time5, y=p5, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B5), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot5n[1])
+    plot6n  =  label.new(x=bar_index+time6, y=p6, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B6), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot6n[1])
+    plot7n  =  label.new(x=bar_index+time7, y=p7, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B7), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot7n[1])
+    plot8n  =  label.new(x=bar_index+time8, y=p8, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B8), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot8n[1])
+    plot9n  =  label.new(x=bar_index+time9, y=p9, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B9), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot9n[1])
+    plot10n  =  label.new(x=bar_index+time10, y=p10, yloc=yloc.price, text='●', tooltip=syminfo.ticker(B10), style=label.style_label_center, color=na , textcolor=color.black, size=A1_1)
+    label.delete(plot10n[1])
+    [plot1n,plot2n,plot3n,plot4n,plot5n,plot6n,plot7n,plot8n,plot9n,plot10n]  
+HanShu_plot(RSI_1,t1,0 ,RSI_2,t2,1 ,RSI_3,t3,2 ,RSI_4,t4,3 ,RSI_5,t5,4 ,RSI_6,t6,5 ,RSI_7,t7,6 ,RSI_8,t8,7 ,RSI_9,t9,8  ,RSI_10,t10,9)
+HanShu_plot(RSI_11,t11,0 ,RSI_12,t12,1 ,RSI_13,t13,2 ,RSI_14,t14,3 ,RSI_15,t15,4 ,RSI_16,t16,5 ,RSI_17,t17,6 ,RSI_18,t18,7 ,RSI_19,t19,8  ,RSI_20,t20,9)
+HanShu_plot(RSI_21,t21,10 ,RSI_22,t22,11 ,RSI_23,t23,12 ,RSI_24,t24,13 ,RSI_25,t25,14 ,RSI_26,t26,15 ,RSI_27,t27,16 ,RSI_28,t28,17 ,RSI_29,t29,18  ,RSI_30,t30,19)
+HanShu_plot(RSI_31,t31,10 ,RSI_32,t32,11 ,RSI_33,t33,12 ,RSI_34,t34,13 ,RSI_35,t35,14 ,RSI_36,t36,15 ,RSI_37,t37,16 ,RSI_38,t38,17 ,RSI_39,t39,18  ,RSI_40,t40,19)
+HanShu_plot(RSI_41,t41,20 ,RSI_42,t42,21 ,RSI_43,t43,22 ,RSI_44,t44,23 ,RSI_45,t45,24 ,RSI_46,t46,25 ,RSI_47,t47,26 ,RSI_48,t48,27 ,RSI_49,t49,28  ,RSI_50,t50,29)
+
+HanShu_plot(RSI_51,t51,30 ,RSI_52,t52,31 ,RSI_53,t53,32 ,RSI_54,t54,33 ,RSI_55,t55,34 ,RSI_56,t56,35 ,RSI_57,t57,36 ,RSI_58,t58,37 ,RSI_59,t59,38  ,RSI_60,t60,39)
+HanShu_plot(RSI_61,t61,30 ,RSI_62,t62,31 ,RSI_63,t63,32 ,RSI_64,t64,33 ,RSI_65,t65,34 ,RSI_66,t66,35 ,RSI_67,t67,36 ,RSI_68,t68,37 ,RSI_69,t69,38  ,RSI_70,t70,39)
+HanShu_plot(RSI_71,t71,40 ,RSI_72,t72,41 ,RSI_73,t73,42 ,RSI_74,t74,43 ,RSI_75,t75,44 ,RSI_76,t76,45 ,RSI_77,t77,46 ,RSI_78,t78,47 ,RSI_79,t79,48  ,RSI_80,t80,49)
+HanShu_plot(RSI_81,t81,40 ,RSI_82,t82,41 ,RSI_83,t83,42 ,RSI_84,t84,43 ,RSI_85,t85,44 ,RSI_86,t86,45 ,RSI_87,t87,46 ,RSI_88,t88,47 ,RSI_89,t89,48  ,RSI_90,t90,49)
+HanShu_plot(RSI_91,t91,50 ,RSI_92,t92,51 ,RSI_93,t93,52 ,RSI_94,t94,53 ,RSI_95,t95,54 ,RSI_96,t96,55 ,RSI_97,t97,56 ,RSI_98,t98,57 ,RSI_99,t99,58  ,RSI_100,t100,59)
+
+// HanShu_plot1(RSI_101,t101,0 ,RSI_102,t102,1 ,RSI_103,t103,2 ,RSI_104,t104,3 ,RSI_105,t105,4 ,RSI_106,t106,5 ,RSI_107,t107,6 ,RSI_108,t108,7 ,RSI_109,t109,8  ,RSI_110,t110,9)
+// HanShu_plot(RSI_111,t111,0 ,RSI_112,t112,1 ,RSI_113,t113,2 ,RSI_114,t114,3 ,RSI_115,t115,4 ,RSI_116,t116,5 ,RSI_117,t117,6 ,RSI_118,t118,7 ,RSI_119,t119,8  ,RSI_120,t120,9)
+// HanShu_plot(RSI_121,t121,0 ,RSI_122,t122,1 ,RSI_123,t123,2 ,RSI_124,t124,3 ,RSI_125,t125,4 ,RSI_126,t126,5 ,RSI_127,t127,6 ,RSI_128,t128,7 ,RSI_129,t129,8  ,RSI_130,t130,9)
+// HanShu_plot(RSI_131,t131,0 ,RSI_132,t132,1 ,RSI_133,t133,2 ,RSI_134,t134,3 ,RSI_135,t135,4 ,RSI_136,t136,5 ,RSI_137,t137,6 ,RSI_138,t138,7 ,RSI_139,t139,8  ,RSI_140,t140,9)
+// HanShu_plot(RSI_141,t141,0 ,RSI_142,t142,1 ,RSI_143,t143,2 ,RSI_144,t144,3 ,RSI_145,t145,4 ,RSI_146,t146,5 ,RSI_147,t147,6 ,RSI_148,t148,7 ,RSI_149,t149,8  ,RSI_150,t150,9)
+// HanShu_plot(RSI_151,t151,0 ,RSI_152,t152,1 ,RSI_153,t153,2 ,RSI_154,t154,3 ,RSI_155,t155,4 ,RSI_156,t156,5 ,RSI_157,t157,6 ,RSI_158,t158,7 ,RSI_159,t159,8  ,RSI_160,t160,9)
+// HanShu_plot(RSI_161,t161,0 ,RSI_162,t162,1 ,RSI_163,t163,2 ,RSI_164,t164,3 ,RSI_165,t165,4 ,RSI_166,t166,5 ,RSI_167,t167,6 ,RSI_168,t168,7 ,RSI_169,t169,8  ,RSI_170,t170,9)
+// HanShu_plot(RSI_171,t171,0 ,RSI_172,t172,1 ,RSI_173,t173,2 ,RSI_174,t174,3 ,RSI_175,t175,4 ,RSI_176,t176,5 ,RSI_177,t177,6 ,RSI_178,t178,7 ,RSI_179,t179,8  ,RSI_180,t180,9)
+// HanShu_plot(RSI_181,t181,0 ,RSI_182,t182,1 ,RSI_183,t183,2 ,RSI_184,t184,3 ,RSI_185,t185,4 ,RSI_186,t186,5 ,RSI_187,t187,6 ,RSI_188,t188,7 ,RSI_189,t189,8  ,RSI_190,t190,9)
+// HanShu_plot(RSI_191,t191,0 ,RSI_192,t192,1 ,RSI_193,t193,2 ,RSI_194,t194,3 ,RSI_195,t195,4 ,RSI_196,t196,5 ,RSI_197,t197,6 ,RSI_198,t198,7 ,RSI_199,t199,8  ,RSI_200,t200,9)
+// HanShu_plot(RSI_201,t201,0 ,RSI_202,t202,1 ,RSI_203,t203,2 ,RSI_204,t204,3 ,RSI_205,t205,4 ,RSI_206,t206,5 ,RSI_207,t207,6 ,RSI_208,t208,7 ,RSI_209,t209,8  ,RSI_200,t210,9)
+// HanShu_plot(RSI_211,t211,0 ,RSI_212,t212,1 ,RSI_213,t213,2 ,RSI_214,t214,3 ,RSI_215,t215,4 ,RSI_216,t216,5 ,RSI_217,t217,6 ,RSI_218,t218,7 ,RSI_219,t219,8  ,RSI_210,t220,9)
+// HanShu_plot(RSI_221,t221,0 ,RSI_222,t222,1 ,RSI_223,t223,2 ,RSI_224,t224,3 ,RSI_225,t225,4 ,RSI_226,t226,5 ,RSI_227,t227,6 ,RSI_228,t228,7 ,RSI_229,t229,8  ,RSI_220,t230,9)
+// HanShu_plot(RSI_231,t231,0 ,RSI_232,t232,1 ,RSI_233,t233,2 ,RSI_234,t234,3 ,RSI_235,t235,4 ,RSI_236,t236,5 ,RSI_237,t237,6 ,RSI_238,t238,7 ,RSI_239,t239,8  ,RSI_230,t240,9)
+// HanShu_plot(RSI_241,t241,0 ,RSI_242,t242,1 ,RSI_243,t243,2 ,RSI_244,t244,3 ,RSI_245,t245,4 ,RSI_246,t246,5 ,RSI_247,t247,6 ,RSI_248,t248,7 ,RSI_249,t249,8  ,RSI_240,t250,9)
+// HanShu_plot(RSI_251,t251,0 ,RSI_252,t252,1 ,RSI_253,t253,2 ,RSI_254,t254,3 ,RSI_255,t255,4 ,RSI_256,t256,5 ,RSI_257,t257,6 ,RSI_258,t258,7 ,RSI_259,t259,8  ,RSI_250,t260,9)
+// HanShu_plot(RSI_261,t261,0 ,RSI_262,t262,1 ,RSI_263,t263,2 ,RSI_264,t264,3 ,RSI_265,t265,4 ,RSI_266,t266,5 ,RSI_267,t267,6 ,RSI_268,t268,7 ,RSI_269,t269,8  ,RSI_260,t270,9)
+// HanShu_plot(RSI_271,t271,0 ,RSI_272,t272,1 ,RSI_273,t273,2 ,RSI_274,t274,3 ,RSI_275,t275,4 ,RSI_276,t276,5 ,RSI_277,t277,6 ,RSI_278,t278,7 ,RSI_279,t279,8  ,RSI_270,t280,9)
+// HanShu_plot(RSI_281,t281,0 ,RSI_282,t282,1 ,RSI_283,t283,2 ,RSI_284,t284,3 ,RSI_285,t285,4 ,RSI_286,t286,5 ,RSI_287,t287,6 ,RSI_288,t288,7 ,RSI_289,t289,8  ,RSI_280,t290,9)
+// HanShu_plot(RSI_291,t291,0 ,RSI_292,t292,1 ,RSI_293,t293,2 ,RSI_294,t294,3 ,RSI_295,t295,4 ,RSI_296,t296,5 ,RSI_297,t297,6 ,RSI_298,t298,7 ,RSI_299,t299,8  ,RSI_290,t300,9)
+// HanShu_plot(RSI_301,t301,0 ,RSI_302,t302,1 ,RSI_303,t303,2 ,RSI_304,t304,3 ,RSI_305,t305,4 ,RSI_306,t306,5 ,RSI_307,t307,6 ,RSI_308,t308,7 ,RSI_309,t309,8  ,RSI_300,t310,9)
+// HanShu_plot(RSI_311,t311,0 ,RSI_312,t312,1 ,RSI_313,t313,2 ,RSI_314,t314,3 ,RSI_315,t315,4 ,RSI_316,t316,5 ,RSI_317,t317,6 ,RSI_318,t318,7 ,RSI_319,t319,8  ,RSI_310,t320,9)
+// HanShu_plot(RSI_321,t321,0 ,RSI_322,t322,1 ,RSI_323,t323,2 ,RSI_324,t324,3 ,RSI_325,t325,4 ,RSI_326,t326,5 ,RSI_327,t327,6 ,RSI_328,t328,7 ,RSI_329,t329,8  ,RSI_320,t330,9)
+// HanShu_plot(RSI_331,t331,0 ,RSI_332,t332,1 ,RSI_333,t333,2 ,RSI_334,t334,3 ,RSI_335,t335,4 ,RSI_336,t336,5 ,RSI_337,t337,6 ,RSI_338,t338,7 ,RSI_339,t339,8  ,RSI_330,t340,9)
+// HanShu_plot(RSI_341,t341,0 ,RSI_342,t342,1 ,RSI_343,t343,2 ,RSI_344,t344,3 ,RSI_345,t345,4 ,RSI_346,t346,5 ,RSI_347,t347,6 ,RSI_348,t348,7 ,RSI_349,t349,8  ,RSI_340,t350,9)
+// HanShu_plot(RSI_351,t351,0 ,RSI_352,t352,1 ,RSI_353,t353,2 ,RSI_354,t354,3 ,RSI_355,t355,4 ,RSI_355,t355,5 ,RSI_355,t355,6 ,RSI_355,t355,7 ,RSI_355,t355,8  ,RSI_355,t355,9)
